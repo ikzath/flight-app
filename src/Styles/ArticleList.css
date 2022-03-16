@@ -1,0 +1,47 @@
+.articleList {
+  background-color: #f9fafa;
+  /* position: absolute; */
+}
+
+.articleListHeaders {
+  margin-left: 94px;
+  margin-bottom: 56px;
+  margin-top: 67px;
+}
+
+h1 {
+  margin-bottom: 73px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 44px;
+  font-weight: 900;
+  color: #000000;
+}
+
+.articleListFilter {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  color: #192024;
+}
+
+.articleListCheckboxes {
+  display: flex;
+  margin-top: 23px;
+  /* align-items: center;
+  justify-content: left; */
+}
+
+input[type="checkbox"] {
+  height: 20px;
+  width: 20px;
+  display: inline-block;
+}
+
+.articleListCheckboxes span {
+  margin-left: 10px;
+  margin-right: 24px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: normal;
+  color: #192024;
+}
