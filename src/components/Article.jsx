@@ -18,8 +18,9 @@ function Article({ flightData : { name, logoURL, alliance, phone, site}}) {
               </div>
               <div className="cardDetails">
               <CardTitle tag="h6" font-weight-bold='true' >{name}</CardTitle>
-              <CardText>{phone}</CardText>
-              <CardText>{site}</CardText>
+              {/* <CardText>{phone}</CardText>
+              <CardText>{site}</CardText> */}
+              <CardText>{alliance}</CardText>
               </div>
             </CardBody>
           </Card>
