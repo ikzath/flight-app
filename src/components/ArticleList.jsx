@@ -6,12 +6,7 @@ import fetchJsonp from "fetch-jsonp";
 function ArticleList() {
 
       const [flightData, setFlightData] = useState([])
-      const [isChecked, setIsChecked] = useState(false);
-      const [filterByAlliance, setFilterByAlliance] = useState({
-        OW : '',
-        ST: '',
-        SA: ''
-      })
+      const [isChecked, setIsChecked] = useState([]);
       const [results, setResults] = useState([]);
      
 
@@ -31,107 +26,39 @@ function ArticleList() {
               .then((data) =>setFlightData(data));
           }       
 
-        const handleCheckboxChange =(event, index)=>{
-            let infos = [...checkedData];
-            infos[index] = {...infos[index], value: event.target.value, checked: event.target.checked};   
-            setcheckedData([...infos]);            
-            
-            const getValue = event.target.value;
-
-            infos.map(i => {
-              if(i.checked && i.id === index && i.value === 'OW'){
-                setFilterByAlliance(prevState => ({
-                  ...prevState,
-                  OW: i.value
-               })); }
-
-              if(!i.checked && i.id === index && i.value === 'OW'){
-                setFilterByAlliance(prevState => ({
-                  ...prevState,
-                  OW: ''
-               })); }
-               
-              if(i.checked && i.id === index && i.value === 'ST'){
-                setFilterByAlliance(prevState => ({
-                  ...prevState,
-                  ST: i.value
-               })); }
-
-              if(!i.checked && i.id === index && i.value === 'ST'){
-                setFilterByAlliance(prevState => ({
-                  ...prevState,
-                  ST: ''
-               })); }
-
-              if(i.checked && i.id === index && i.value === 'SA'){
-                setFilterByAlliance(prevState => ({
-                  ...prevState,
-                  SA: i.value
-               })); }
-
-              if(!i.checked && i.id === index && i.value === 'SA'){
-                setFilterByAlliance(prevState => ({
-                  ...prevState,
-                  SA: ''
-               })); }
-
-              //   if(!i.checked && i.id === index){
-              //     setFilterByAlliance('')                                   
-              // }
-            })
-          }
-            console.log(filterByAlliance)
-
-
-        useEffect(() => {
+          useEffect(() => {
           JSONP()     
-
-          if(filterByAlliance === ''){
-            setResults(flightData)
-          }   
-
         }, [])
         
+        function onHandleChange(e){
+          const { checked, value } = e.target
+          if(checked){
+            setIsChecked(prev => ([...prev, value]))
+          } else
+          setIsChecked(isChecked.filter((id) => id !== value));
+        }
+        console.log(isChecked)
+
         
-        useEffect(() => {
-          
-          let unFilteredData = [...flightData]       
-          
-          if(filterByAlliance.OW === '' || filterByAlliance.ST === '' || filterByAlliance.SA === '' ){
+        useEffect(() => {                 
+                        
+          let unFilteredData = [...flightData]      
+
+          if(!isChecked.length) {
             setResults(flightData)
-          }   
-                            
-          if(filterByAlliance.OW === 'OW'){
-            unFilteredData = unFilteredData.filter(flight => flight.alliance.includes('OW'))
           }
 
-          if(filterByAlliance.ST === 'ST'){
-            unFilteredData = unFilteredData.filter(flight => flight.alliance.includes('ST'))
-          }
-
-          if(filterByAlliance.SA === 'SA'){
-            unFilteredData = unFilteredData.filter(flight => flight.alliance.includes('SA'))
-          }       
-
-          if(filterByAlliance.ST === 'ST' && filterByAlliance.OW === 'OW'){
-            unFilteredData = unFilteredData.filter(flight => (flight.alliance === 'ST') && (flight.alliance === 'OW'))
-          }    
-
-          if(filterByAlliance.SA === 'SA' && filterByAlliance.OW === 'OW'){
-            unFilteredData = unFilteredData.map(flight => { return flight.alliance.includes('SA') && flight.alliance.includes('OW') })
-          }       
-          if(filterByAlliance.ST === 'ST' && filterByAlliance.SA === 'SA'){
-            unFilteredData = unFilteredData.filter(flight => flight.alliance.includes('ST') && flight.alliance.includes('SA'))
-          }  
-
-          if(filterByAlliance.ST === 'ST' && filterByAlliance.SA === 'SA' &&  filterByAlliance.OW === 'OW'){
-            unFilteredData = unFilteredData.filter(flight => flight.alliance.includes('ST') && flight.alliance.includes('SA') &&
-            flight.alliance.includes('OW'))
-          }                   
-                   
+          isChecked.forEach(value => {
+            if(isChecked.length === 3) {
+              unFilteredData = unFilteredData.filter(flight => !flight.alliance.includes('none'))
+            }
+            if(isChecked.length > 0 && isChecked.length < 3 ){
+              unFilteredData = unFilteredData.filter(flight => flight.alliance.includes(value))
+            }
+            // unFilteredData = unFilteredData.filter(flight => flight.alliance === value)
+          })
           setResults(unFilteredData)
-
-        }, [flightData, checkedData, filterByAlliance])
+        }, [isChecked, flightData])
       
 
   
@@ -151,7 +78,7 @@ function ArticleList() {
                       key={item.id}
                       type="checkbox" 
                       value={item.value}
-                      onChange={(e) => handleCheckboxChange(e, index)}
+                      onChange={(e) => onHandleChange(e)}
                   />
                   <p className="textbox-span"> {item.name}</p> 
               </> )}
