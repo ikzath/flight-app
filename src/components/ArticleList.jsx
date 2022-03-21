@@ -6,60 +6,64 @@ import fetchJsonp from "fetch-jsonp";
 function ArticleList() {
 
       const [flightData, setFlightData] = useState([])
-      const [isChecked, setIsChecked] = useState([]);
-      const [results, setResults] = useState([]);
-     
+      const [results, setResults] = useState([]);     
+      const [filterByAlliance, setFilterByAlliance] = useState({});
 
       const filterLabels = [
-        { id:0, value: 'OW', name: 'One World', checked: false},
-        { id:1, value: 'ST', name: 'Sky Team', checked: false},
-        { id:2, value: 'SA', name: 'Star Alliance', checked: false}
+        { value: 'OW', name: 'One World', checked: false},
+        { value: 'ST', name: 'Sky Team', checked: false},
+        { value: 'SA', name: 'Star Alliance', checked: false}
       ]
 
       const [checkedData, setcheckedData] = useState(filterLabels)
 
        function JSONP() {
-            fetchJsonp("https://kayak.com/h/mobileapis/directory/airlines/homework", {
-              jsonpCallback: "jsonp"
-            })
-              .then((res) => res.json())
-              .then((data) =>setFlightData(data));
+          fetchJsonp("https://kayak.com/h/mobileapis/directory/airlines/homework", {
+            jsonpCallback: "jsonp"
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              setFlightData(data);
+              setResults(data)
+            });
           }       
 
-          useEffect(() => {
+        const onHandleChange = (event, index) => {
+
+          let infos = [...checkedData]
+          infos[index] = {...infos[index], checked: event.target.checked }
+          setcheckedData([...infos])
+
+          let filterByAllianceCopy = {...filterByAlliance}
+            infos.forEach(item => {
+              filterByAllianceCopy = {
+                ...filterByAllianceCopy,
+                [item.value] : item.checked ? item.value : '',
+              }
+          })
+            setFilterByAlliance(filterByAllianceCopy)
+        };
+        
+        useEffect(() => {
           JSONP()     
-        }, [])
+        }, [])        
         
-        function onHandleChange(e){
-          const { checked, value } = e.target
-          if(checked){
-            setIsChecked(prev => ([...prev, value]))
-          } else
-          setIsChecked(isChecked.filter((id) => id !== value));
-        }
-        console.log(isChecked)
-
-        
-        useEffect(() => {                 
-                        
-          let unFilteredData = [...flightData]      
-
-          if(!isChecked.length) {
-            setResults(flightData)
+        useEffect(() => {
+          let unFilteredData = [...flightData];
+          
+          if(checkedData.some(i => i.checked)){
+            unFilteredData = []
           }
 
-          isChecked.forEach(value => {
-            if(isChecked.length === 3) {
-              unFilteredData = unFilteredData.filter(flight => !flight.alliance.includes('none'))
-            }
-            if(isChecked.length > 0 && isChecked.length < 3 ){
-              unFilteredData = unFilteredData.filter(flight => flight.alliance.includes(value))
-            }
-            // unFilteredData = unFilteredData.filter(flight => flight.alliance === value)
-          })
-          setResults(unFilteredData)
-        }, [isChecked, flightData])
-      
+          checkedData.forEach(i =>{
+            if(i.checked){
+            unFilteredData = [
+              ...unFilteredData,
+              ...flightData.filter(flight => flight.alliance === i.value)
+            ]
+          }})
+          setResults(unFilteredData);
+        }, [flightData, checkedData, filterByAlliance]);      
 
   
   return (
@@ -75,10 +79,10 @@ function ArticleList() {
                   {filterLabels.map((item, index) =>
                   <>
                   <input 
-                      key={item.id}
+                      key={index}
                       type="checkbox" 
                       value={item.value}
-                      onChange={(e) => onHandleChange(e)}
+                      onChange={(e) => onHandleChange(e, index)}
                   />
                   <p className="textbox-span"> {item.name}</p> 
               </> )}

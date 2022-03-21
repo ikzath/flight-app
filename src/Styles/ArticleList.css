@@ -1,12 +1,11 @@
 .articleList {
   background-color: #f9fafa;
-  /* position: absolute; */
 }
 
 .articleListHeaders {
   margin-left: 94px;
   margin-bottom: 56px;
-  margin-top: 67px;
+  margin-top: 19px;
 }
 
 h1 {
@@ -27,8 +26,6 @@ h1 {
 .articleListCheckboxes {
   display: flex;
   margin-top: 23px;
-  /* align-items: center;
-  justify-content: left; */
 }
 
 input[type="checkbox"] {
@@ -37,8 +34,8 @@ input[type="checkbox"] {
   display: inline-block;
 }
 
-.articleListCheckboxes span {
-  margin-left: 10px;
+.textbox-span {
+  margin-left: 16px;
   margin-right: 24px;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 14px;

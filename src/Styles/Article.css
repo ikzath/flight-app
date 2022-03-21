@@ -1,9 +1,54 @@
-.Article {
+:root {
+  --font-family: Arial, Helvetica, sans-serif;
+  --font-size: 16px;
+  --font-weight: normal;
+  --color: #192024;
+}
+
+.cardGroup {
+  width: 260px;
+  height: 240px;
+  margin: 16px;
   background-color: #f9fafa;
+}
+
+.card {
+  border-radius: 8px;
+  box-shadow: 0 -1px 4px 0 rgba(25, 32, 36, 0.04),
+    0 3px 6px 0 rgba(25, 32, 36, 0.16);
+  border: solid 1px #363f45;
 }
 
 .displayCard__contents {
   display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cardImage {
+  margin-right: 18px;
+}
+
+.cardTitle {
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  font-weight: bold;
+  color: #192024;
+}
+
+.cardText {
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  font-weight: var(--font-weight);
+  color: #192024;
+}
+
+.cardSite {
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  font-weight: var(--font-weight);
+  color: #5a6872;
+  object-fit: contain;
 }
 
 .flightIcon {
@@ -11,8 +56,15 @@
   width: 30px;
 }
 
-.displayCard {
-  width: 260px;
-  height: 240px;
-  margin: 16px;
+@media screen and (max-width: 992px) {
+  .cardGroup {
+    width: 300px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .card {
+    height: 240px;
+    width: 300px;
+  }
 }
